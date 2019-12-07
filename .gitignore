@@ -1,0 +1,11 @@
+*.pyc
+*zip
+*pdf
+config.py
+sandbox.py
+sandbox/*
+*.idea*
+*.pt
+*.mp4
+*.npy
+*.pkl
