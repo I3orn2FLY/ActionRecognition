@@ -1,10 +1,10 @@
 import cv2
+import torch
 import numpy as np
 from scipy.spatial import distance_matrix
+
+from utils import get_model, predict
 from config import *
-from training.train import get_model, predict
-import os
-import torch
 
 
 class Track:
@@ -59,8 +59,8 @@ class Track:
         elif len(self.features) == SEQ_LENGTH:
             action_crit = self._get_action_crit()
 
-            if action_crit < CRITERION_TH:
-                return None
+            # if action_crit < CRITERION_TH:
+            #     return None
 
             feat_sample = np.array(self.features)
             feat_sample[:, 0] -= feat_sample[0, 0]
@@ -128,7 +128,7 @@ class Tracker:
                 preds = predict(self.model, inp, self.device)
                 if draw:
                     for pred, track in zip(preds, tracks_with_actions):
-                        action = LABEL_DECODER[pred]
+                        action = idx2label[pred]
                         track.set_action(action)
 
         if draw:

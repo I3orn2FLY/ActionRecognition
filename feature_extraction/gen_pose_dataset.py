@@ -35,7 +35,7 @@ def print_progress(cur_idx, omit, L, start_time):
 def split_and_save(samples, labels, splits):
     assert len(samples) == len(labels) == len(splits), "Dimensions mismatch"
     X = np.array(samples)
-    y = np.array(LABEL_ENCODER[label] for label in labels).astype(np.int8)
+    y = np.array([label2idx[label] for label in labels]).astype(np.int8)
     train_idxs = [i for i in range(len(y)) if splits[i] == "train"]
     val_idxs = [i for i in range(len(y)) if splits[i] == "val"]
     test_idxs = [i for i in range(len(y)) if splits[i] == "test"]
@@ -59,6 +59,10 @@ def split_and_save(samples, labels, splits):
     np.save("../vars/y_val", y_val)
     np.save("../vars/y_test", y_test)
 
+    print(X_train.shape, y_train.shape)
+    print(X_val.shape, y_val.shape)
+    print(X_test.shape, y_test.shape)
+
 
 if __name__ == '__main__':
     dataset = pd.read_csv(os.path.join(DATASET_DIR, "annotation.csv"))
@@ -74,7 +78,8 @@ if __name__ == '__main__':
         video_path = os.sep.join([DATASET_DIR, "videos", row["video_name"]])
         data_path = os.sep.join([DATASET_DIR, "pose_data", row["video_name"] + ".pkl"])
 
-        if "shoot" in row["label"] or (not os.path.exists(data_path)) or (not os.path.exists(video_path)):
+        if ("shoot" in row["label"]) or (not os.path.exists(data_path)) \
+                or (not os.path.exists(video_path)) or ("{kth}" not in row["label_default"]):
             omit += 1
             continue
 
@@ -105,7 +110,10 @@ if __name__ == '__main__':
         labels += [row["label"]] * num_samples
         splits += [row["split"]] * num_samples
 
-        if idx % 5 == 0:
+        if (idx) % 10 == 0:
             print_progress(idx + 1, omit, dataset.shape[0], start_time)
 
+
     print()
+    split_and_save(samples, labels, splits)
+
