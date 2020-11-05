@@ -1,4 +1,4 @@
-<!-- # ActionRecognition
+# ActionRecognition
 ### Action Recognition based on pose estimation.  
 **Graduation Project for Bachelor Degree**</br> 
 By Kenessary Koishybay, Nauryzbek Razakhbergenov.</br>
@@ -101,6 +101,3 @@ Code is in ExtractData folder.
 
 
 ## TODO
-
-
- -->
